@@ -1,58 +1,81 @@
 FROM ubuntu:18.04 as builder
- 
+
+LABEL maintainer="suresh@robotpajamas.com"
+
+SHELL ["/bin/bash", "-c"]
+ARG DEBIAN_FRONTEND=non-interactive
+
 WORKDIR /ti-processor-sdk-linux-arago
- 
+
+# hadolint ignore=DL3008
 RUN apt-get update \
-   && apt-get install -yq git wget xz-utils
- 
+   && apt-get install -y -qq --no-install-recommends \
+      ca-certificates \
+      git \
+      tar \
+      wget \
+      xz-utils
+
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
 RUN tar -Jxvf gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
 RUN rm gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
- 
+
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 RUN tar -Jxvf gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 RUN rm gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
- 
+
 RUN git clone git://arago-project.org/git/projects/oe-layersetup.git ./tisdk
 WORKDIR /ti-processor-sdk-linux-arago/tisdk
- 
- 
+
+
 FROM ubuntu:18.04
-WORKDIR /ti-processor-sdk-linux-arago
-COPY --from=builder /ti-processor-sdk-linux-arago .
- 
+
+SHELL ["/bin/bash", "-c"]
+ARG DEBIAN_FRONTEND=non-interactive
+
 # Pull required building packages and configure timezone and locale to avoid Python complaints
+# hadolint ignore=DL3008
 RUN apt-get update \
-   && apt-get install -yq \
-       build-essential \
-       chrpath \
-       cpio \
-       diffstat \
-       gawk \
-       git \
-       lib32ncurses5 \
-       lib32z1 \
-       libc6-i386 \
-       libstdc++6-i386-cross \
-       locales \
-       python \
-       python3 \
-       texinfo \
-       wget \
+   && apt-get install -y -qq --no-install-recommends \
+      build-essential \
+      ca-certificates \
+      chrpath \
+      cpio \
+      diffstat \
+      file \
+      gawk \
+      git \
+      lib32ncurses5 \
+      lib32z1 \
+      libc6-i386 \
+      libstdc++6-i386-cross \
+      locales \
+      python \
+      python3 \
+      tar \
+      texinfo \
+      wget \
    && rm -rf /var/lib/apt/lists/* \
    && echo 'LANG="en_US.UTF-8"'>/etc/default/locale \
    && locale-gen en en_US en_US.UTF-8 \
    && dpkg-reconfigure --frontend=noninteractive locales \
-   && update-locale LANG=en_US.UTF-8
- 
-# ENV LANG=en_US.UTF-8
-# ENV LANGUAGE=en_US.UTF-8
-# ENV LANG_ALL=en_US.UTF-8
+   && update-locale LANG=en_US.UTF-8 \
+   && echo "dash dash/sh boolean false" | debconf-set-selections \
+   && dpkg-reconfigure -p critical dash \
+   && groupadd -r bitbakery \
+   && useradd --no-log-init -u 1000 -r -g bitbakery bitbaker
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
- 
+
 # Required for bitbake compilation
 ENV TOOLCHAIN_PATH_ARMV7=/ti-processor-sdk-linux-arago/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf
 ENV TOOLCHAIN_PATH_ARMV8=/ti-processor-sdk-linux-arago/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu
 ENV MACHINE=am335x-evm
- 
+
+USER bitbaker
+WORKDIR /ti-processor-sdk-linux-arago
+COPY --from=builder --chown=bitbaker:bitbakery /ti-processor-sdk-linux-arago .
+
 CMD ["bash"]
