@@ -5,8 +5,6 @@ LABEL maintainer="suresh@robotpajamas.com"
 SHELL ["/bin/bash", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
 
-WORKDIR /ti-processor-sdk-linux-arago
-
 # hadolint ignore=DL3008
 RUN apt-get update \
    && apt-get install -y -qq --no-install-recommends \
@@ -16,22 +14,24 @@ RUN apt-get update \
       wget \
       xz-utils
 
-RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
-RUN tar -Jxvf gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
-RUN rm gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
+WORKDIR /gcc
 
-RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
-RUN tar -Jxvf gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
-RUN rm gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
+RUN tar -Jxvf gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
+RUN rm gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
 
-RUN git clone git://arago-project.org/git/projects/oe-layersetup.git ./tisdk
-WORKDIR /ti-processor-sdk-linux-arago/tisdk
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
+RUN tar -Jxvf gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
+RUN rm gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
+
+RUN git clone git://arago-project.org/git/projects/oe-layersetup.git /arago
 
 
 FROM ubuntu:18.04
 
 SHELL ["/bin/bash", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
+WORKDIR /arago
 
 # Pull required building packages and configure timezone and locale to avoid Python complaints
 # hadolint ignore=DL3008
@@ -52,6 +52,7 @@ RUN apt-get update \
       locales \
       python \
       python3 \
+      python3-distutils \
       tar \
       texinfo \
       wget \
@@ -63,19 +64,20 @@ RUN apt-get update \
    && echo "dash dash/sh boolean false" | debconf-set-selections \
    && dpkg-reconfigure -p critical dash \
    && groupadd -r bitbakery \
-   && useradd --no-log-init -u 1000 -r -g bitbakery bitbaker
+   && useradd --no-log-init -u 1000 -r -g bitbakery bitbaker \
+   && chown bitbaker:bitbakery /arago
+
+USER bitbaker
+COPY --from=builder --chown=bitbaker:bitbakery /gcc /gcc
+COPY --from=builder --chown=bitbaker:bitbakery /arago /arago
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
 # Required for bitbake compilation
-ENV TOOLCHAIN_PATH_ARMV7=/ti-processor-sdk-linux-arago/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf
-ENV TOOLCHAIN_PATH_ARMV8=/ti-processor-sdk-linux-arago/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu
+ENV TOOLCHAIN_PATH_ARMV7=/gcc/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf
+ENV TOOLCHAIN_PATH_ARMV8=/gcc/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu
 ENV MACHINE=am335x-evm
-
-USER bitbaker
-WORKDIR /ti-processor-sdk-linux-arago
-COPY --from=builder --chown=bitbaker:bitbakery /ti-processor-sdk-linux-arago .
 
 CMD ["bash"]
