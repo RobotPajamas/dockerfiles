@@ -12,10 +12,10 @@ RUN apt-get update \
 
 WORKDIR /ti-processor-sdk-linux-am335x
 
-RUN wget https://software-dl.ti.com/processor-sdk-linux/esd/AM335X/latest/exports/ti-processor-sdk-linux-am335x-evm-06.03.00.106-Linux-x86-Install.bin
-RUN chmod +x ./ti-processor-sdk-linux-am335x-evm-06.03.00.106-Linux-x86-Install.bin
-RUN ./ti-processor-sdk-linux-am335x-evm-06.03.00.106-Linux-x86-Install.bin --mode unattended --prefix .
-RUN rm ./ti-processor-sdk-linux-am335x-evm-06.03.00.106-Linux-x86-Install.bin
+RUN wget https://software-dl.ti.com/processor-sdk-linux/esd/AM335X/latest/exports/ti-processor-sdk-linux-am335x-evm-07.03.00.005-Linux-x86-Install.bin
+RUN chmod +x ./ti-processor-sdk-linux-am335x-evm-07.03.00.005-Linux-x86-Install.bin
+RUN ./ti-processor-sdk-linux-am335x-evm-07.03.00.005-Linux-x86-Install.bin --mode unattended --prefix .
+RUN rm ./ti-processor-sdk-linux-am335x-evm-07.03.00.005-Linux-x86-Install.bin
 COPY ./prompts.sh .
 RUN chmod +x ./prompts.sh
 RUN sudo ./prompts.sh && sudo ./prompts.sh
