@@ -7,7 +7,7 @@ FROM debian:buster-20210902-slim
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG BUILDROOT_VERSION=buildroot-2021.02.5
+ARG BUILDROOT_VERSION=buildroot-2021.11
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
