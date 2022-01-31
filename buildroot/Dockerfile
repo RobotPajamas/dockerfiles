@@ -1,17 +1,13 @@
-# TODO: Can't get buildroot to use the pre-installed toolchain - would save a lot of time in the build
-#FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
-
-# TODO: Cannot inherit from gcc-arm-linux-gnueabihf because there is a buildroot + gcc10 problem
-# Need to use Buster with gcc8 or gcc9
-FROM debian:buster-20210902-slim
+FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG BUILDROOT_VERSION=buildroot-2021.11
+ARG BUILDROOT_VERSION=buildroot-2021.11.1
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
 
+USER root
 RUN apt-get update \
     && apt-get install -y -qq --no-install-recommends \
     bash \
@@ -38,9 +34,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && wget -O- https://buildroot.org/downloads/${BUILDROOT_VERSION}.tar.gz | tar -xvz \
     && mv /${BUILDROOT_VERSION} /buildroot \
-    && mkdir /app /app/cache /app/src /app/output \
-    && groupadd -r armoire \
-    && useradd --no-log-init -u 1000 -r -g armoire armothy \
+    && mkdir -p /app /app/cache /app/src /app/output \
     && chown -R armothy:armoire /app /buildroot
 
 USER armothy
@@ -48,6 +42,7 @@ USER armothy
 ENV ARCH="arm"
 ENV BR2_CCACHE_DIR="/app/cache/ccache"
 ENV BR2_DL_DIR="/app/cache/dl"
+ENV CCACHE_DIR="/app/cache/ccache"
 
 WORKDIR /app/output
 
