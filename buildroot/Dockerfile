@@ -2,7 +2,7 @@ FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG BUILDROOT_VERSION=buildroot-2021.11.1
+ARG BUILDROOT_VERSION=buildroot-2022.02-rc2
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
@@ -23,6 +23,7 @@ RUN apt-get update \
     git \
     libncurses5-dev \
     make \
+    nano \
     patch \
     perl \
     python3 \
