@@ -2,7 +2,7 @@ FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG BUILDROOT_VERSION=buildroot-2022.02-rc2
+ARG BUILDROOT_VERSION=buildroot-2022.02
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
