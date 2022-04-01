@@ -11,7 +11,7 @@ Optionally bind mount `ccache`, so that it can be shared across builds or contai
 
 
 ```bash
-docker run -v uboot202107:/app -v /tmp/ccache:/ccache -it uboot:latest bash
+docker run -v uboot202107:/app -v /tmp/ccache:/ccache -it robotpajamas/u-boot-builder:latest bash
 
 make am335x_evm_defconfig
 make
