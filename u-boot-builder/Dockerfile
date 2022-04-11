@@ -2,7 +2,7 @@ FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG UBOOT_TAG=v2021.07
+ARG UBOOT_TAG=v2022.04
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
@@ -16,11 +16,14 @@ RUN apt-get update \
     ca-certificates \
     flex \
     git \
+    libssl-dev \
     make \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /app \
+    && mkdir -p /ccache \
     && git clone --depth 1 --branch ${UBOOT_TAG} https://github.com/u-boot/u-boot.git /app \
-    && chown -R armothy:armoire /app
+    && chown -R armothy:armoire /app \
+    && chown -R armothy:armoire /ccache
 
 USER armothy
 WORKDIR /app
