@@ -11,11 +11,13 @@ USER root
 RUN apt-get update \
     && apt-get install -y -qq --no-install-recommends \
     bash \
+    bc \
     bison \
     build-essential \
     ca-certificates \
     flex \
     git \
+    libncurses5-dev \
     libssl-dev \
     make \
     && rm -rf /var/lib/apt/lists/* \

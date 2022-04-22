@@ -16,6 +16,7 @@ RUN apt-get update \
     build-essential \
     flex \
     git \
+    libncurses5-dev \
     libssl-dev \
     make \
     && rm -rf /var/lib/apt/lists/* \
