@@ -4,11 +4,11 @@
 
 When using these dev envs, I tend to just jump into bash directly and use the container like it's a VM, as I find it easier. 
 
-`docker -v $(pwd):/app -it robotpajamas/buildroot:2021.11.1 bash`
+`docker -v $(pwd):/app -it robotpajamas/buildroot:2022.05 bash`
 
 However, they can also be used externally (e.g. when calling from a script as part of automation)
 
-`docker -v $(pwd):/app -it robotpajamas/buildroot:2021.11.1 make O=/app/output -C /buildroot beaglebone_defconfig && make`
+`docker -v $(pwd):/app -it robotpajamas/buildroot:2022.05 make O=/app/output -C /buildroot beaglebone_defconfig && make`
 
 There may be some permissions issues here, if the volume doesn't match what is expected.
 

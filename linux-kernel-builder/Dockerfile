@@ -2,7 +2,7 @@ FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG LINUX_TAG=v5.17.4
+ARG LINUX_TAG=v5.15.46
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
@@ -16,6 +16,7 @@ RUN apt-get update \
     build-essential \
     flex \
     git \
+    libmpc-dev \
     libncurses5-dev \
     libssl-dev \
     make \
