@@ -2,7 +2,7 @@ FROM robotpajamas/gcc-arm-linux-gnueabihf:10.3-2021.07 as builder
 
 LABEL maintainer="suresh@robotpajamas.com"
 
-ARG UBOOT_TAG=v2022.04
+ARG UBOOT_TAG=v2022.07
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=non-interactive
@@ -30,4 +30,8 @@ RUN apt-get update \
 USER armothy
 WORKDIR /app
 
-CMD ["bash"]
+COPY docker-entrypoint.sh /
+ENV DEFCONFIG="qemu_arm_defconfig"
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["make"]
