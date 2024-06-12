@@ -32,10 +32,10 @@ jobs:
       #             "containerd-snapshotter": true
       #           }
       #         }  
-      # - uses: docker/setup-buildx-action@v3
-      #   with:
-      #     install: true
-      #     driver: docker  
+      - uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver: docker  
       # - name: Expose GitHub Runtime
       #   uses: crazy-max/ghaction-github-runtime@v3
 
