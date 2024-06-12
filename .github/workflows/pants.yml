@@ -10,6 +10,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,6 +23,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # Need to use this action to specify containerd, otherwise it won't cache
+      - uses: crazy-max/ghaction-setup-docker@v3
+        with:
+          daemon-config: |
+              {
+                "features": {
+                  "containerd-snapshotter": true
+                }
+              }
+
+      # This seems to be optional - if you're not doing cross-arch compilation of the container content
+      # - uses: docker/setup-buildx-action@v3
+      #   with:
+      #     install: true
+      #     driver: docker  
+
+      - name: Set up environment variables for Pants (Docker) to use GHA Cache 
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable("ACTIONS_CACHE_URL", process.env.ACTIONS_CACHE_URL || "");
+            core.exportVariable("ACTIONS_RUNTIME_TOKEN", process.env.ACTIONS_RUNTIME_TOKEN || "");
 
       - uses: pantsbuild/actions/init-pants@v9
         with:
@@ -36,6 +60,10 @@ jobs:
       - name: Lint
         run: |
           pants update-build-files --check lint ::
+
+      - name: Package
+        run: |
+          pants --docker-build-verbose package gcc-arm-none-eabi/:
 
       # - name: Upload pants log
       #   uses: actions/upload-artifact@v2
