@@ -24,14 +24,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - uses: crazy-max/ghaction-setup-docker@v3
-      #   with:
-      #     daemon-config: |
-      #         {
-      #           "features": {
-      #             "containerd-snapshotter": true
-      #           }
-      #         }  
+      - uses: crazy-max/ghaction-setup-docker@v3
+        with:
+          daemon-config: |
+              {
+                "features": {
+                  "containerd-snapshotter": true
+                }
+              }
+
       - uses: docker/setup-buildx-action@v3
         with:
           install: true
