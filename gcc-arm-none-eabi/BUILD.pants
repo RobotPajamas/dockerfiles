@@ -1,3 +1,5 @@
 docker_image(
     name="gcc-arm-none-eabi",
+    cache_from={"type": "gha", "scope": "gcc-arm-none-eabi-gha"},
+    cache_to={"type": "gha", "mode": "max", "scope": "gcc-arm-none-eabi-gha"},
 )
