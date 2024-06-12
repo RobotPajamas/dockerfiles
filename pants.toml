@@ -8,6 +8,9 @@ backend_packages = [
     "pants.backend.docker.lint.hadolint",
 ]
 
+[docker]
+use_buildx = true
+
 [python]
 interpreter_constraints = [">=3.9,<4"]
 
