@@ -29,6 +29,13 @@ jobs:
           install: true
           driver: docker  
 
+      - name: Set up environment variables for Pants (Docker) to use GHA Cache 
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable("ACTIONS_CACHE_URL", process.env.ACTIONS_CACHE_URL || "");
+            core.exportVariable("ACTIONS_RUNTIME_TOKEN", process.env.ACTIONS_RUNTIME_TOKEN || "");
+
       - uses: pantsbuild/actions/init-pants@v9
         with:
           # cache0 makes it easy to bust the cache if needed
