@@ -37,6 +37,10 @@ jobs:
         run: |
           pants update-build-files --check lint ::
 
+      - name: Package
+        run: |
+          pants package u-boot-builder/:
+
       # - name: Upload pants log
       #   uses: actions/upload-artifact@v2
       #   with:
