@@ -7,7 +7,7 @@ RUN /opt/python/cp38-cp38/bin/python -m pip install cython==3.0a6 \
    && useradd -u 1000 -r -g cythonite cythonizer
 
 USER cythonizer
-COPY --chown=cythonizer:cythonite ./docker-entrypoint.sh /docker-entrypoint.sh
+COPY --chown=cythonizer:cythonite gcf-cythonize/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 WORKDIR /app

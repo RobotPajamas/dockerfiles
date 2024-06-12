@@ -1,0 +1,15 @@
+[GLOBAL]
+pants_version = "2.21.0"
+pantsd = true 
+build_patterns = ["BUILD.pants", "BUILD"]
+
+backend_packages = [
+    "pants.backend.docker",
+    "pants.backend.docker.lint.hadolint",
+]
+
+[python]
+interpreter_constraints = [">=3.9,<4"]
+
+[anonymous-telemetry]
+enabled = false
