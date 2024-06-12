@@ -34,10 +34,11 @@ jobs:
                 }
               }
 
-      # - uses: docker/setup-buildx-action@v3
-      #   with:
-      #     install: true
-      #     driver: docker  
+      # buildx seems to be optional - if you're not doing cross-arch compilation of the container content
+      - uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver: docker  
 
       - name: Set up environment variables for Pants (Docker) to use GHA Cache 
         uses: actions/github-script@v7
