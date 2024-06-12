@@ -1,0 +1,9 @@
+file(
+    name="entrypoint",
+    source="docker-entrypoint.sh",    
+)
+
+docker_image(
+    name="u-boot-builder",
+    dependencies=[":entrypoint"],
+)
