@@ -1,6 +1,6 @@
 file(
     name="entrypoint",
-    source="docker-entrypoint.sh",    
+    source="docker-entrypoint.sh",
 )
 
 docker_image(
