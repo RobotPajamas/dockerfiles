@@ -1,11 +1,16 @@
 [GLOBAL]
 pants_version = "2.21.0"
-pantsd = true 
+
+build_file_prelude_globs = ["pants-plugins/macros.py"]
 build_patterns = ["BUILD.pants", "BUILD"]
+pantsd = true 
 
 backend_packages = [
     "pants.backend.docker",
     "pants.backend.docker.lint.hadolint",
+    "pants.backend.python",
+    "pants.backend.experimental.python.lint.ruff.check",
+    "pants.backend.experimental.python.lint.ruff.format",
 ]
 
 [docker]
