@@ -3,7 +3,7 @@ file(
     source="docker-entrypoint.sh",
 )
 
-docker_image(
+docker_image_gha(
     name="gcf-cythonize",
     dependencies=[":entrypoint"],
 )
