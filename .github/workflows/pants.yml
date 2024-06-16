@@ -3,7 +3,7 @@
 
 # See https://pants.readme.io/docs/using-pants-in-ci for tips on how to set up your CI with Pants.
 
-name: Pants linting
+name: CI
 
 on:
   push:
