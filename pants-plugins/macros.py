@@ -16,7 +16,7 @@ def docker_image_gha(name: str, **kwargs) -> None:
     cache_to = kwargs.pop("cache_to", {"type": "registry", "mode": "max", "ref": "robotpajamas/dockerfiles-build-cache:my-branch"})
 
     docker_image(  # noqa: F821
-        name=name,
+        name=f"{name}-ghcr",
         cache_from=cache_from,
         cache_to=cache_to,
         **kwargs,
