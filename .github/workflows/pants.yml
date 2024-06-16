@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     env:
       PANTS_CONFIG_FILES: pants.ci.toml
     strategy:
