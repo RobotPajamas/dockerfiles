@@ -16,7 +16,7 @@ def docker_image_gha(name: str, **kwargs) -> None:
         "cache_from",
         {
             "type": "registry",
-            "ref": f"ghcr.io/robotpajamas/dockerfiles/build-cache:{name}",
+            "ref": f"ghcr.io/robotpajamas/dockerfiles/build-cache/something:{name}:somethingelse",
         },
     )
     cache_to = kwargs.pop(
@@ -24,7 +24,7 @@ def docker_image_gha(name: str, **kwargs) -> None:
         {
             "type": "registry",
             "mode": "max",
-            "ref": f"ghcr.io/robotpajamas/dockerfiles/build-cache:{name}",
+            "ref": f"ghcr.io/robotpajamas/dockerfiles/build-cache/something:{name}:somethingelse",
         },
     )
 
