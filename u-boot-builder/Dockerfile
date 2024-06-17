@@ -20,7 +20,7 @@ RUN apt-get update \
     libncurses5-dev=6.2+20201114-2+deb11u2 \
     libssl-dev=1.1.1w-0+deb11u1 \
     make=4.3-4.1 \
-    && rm -rf /var/lib/apt/lists/* \
+    # && rm -rf /var/lib/apt/lists/* \ 
     && mkdir -p /app \
     && mkdir -p /ccache \
     && git clone --depth 1 --branch ${UBOOT_TAG} https://github.com/u-boot/u-boot.git /app \
