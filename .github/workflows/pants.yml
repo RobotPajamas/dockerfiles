@@ -73,7 +73,7 @@ jobs:
 
       - name: Package
         run: |
-          pants --docker-build-verbose package ::
+          pants --docker-build-verbose package gcc-arm-none-eabi:
 
       # - name: Upload pants log
       #   uses: actions/upload-artifact@v2
