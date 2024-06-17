@@ -25,8 +25,7 @@ RUN apt-get update \
     && mkdir -p /ccache \
     && git clone --depth 1 --branch ${UBOOT_TAG} https://github.com/u-boot/u-boot.git /app \
     && chown -R armothy:armoire /app \
-    && chown -R armothy:armoire /ccache \
-    && mkdir -p nothingmuch
+    && chown -R armothy:armoire /ccache
 
 USER armothy
 WORKDIR /app
