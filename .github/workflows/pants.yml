@@ -63,6 +63,18 @@ jobs:
           gha-cache-key: cache0-py${{ matrix.python_version }}
           named-caches-hash: ${{ hashFiles('build-support/lockfiles/*.lock') }}
 
+      - name: Emit GH env vars
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Base ref: ${{ github.base_ref }}"
+          echo "Head ref: ${{ github.head_ref }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Ref name: ${{ github.ref_name }}"
+          echo "Repo: ${{ github.repository }}"
+          echo "Owner: ${{ github.repository_owner }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Triggering Actor: ${{ github.triggering_actor }}"
+
       - name: Bootstrap Pants
         run: |
           pants --version
