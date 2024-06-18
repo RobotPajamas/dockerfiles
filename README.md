@@ -1,5 +1,6 @@
 # Dockerfiles
 
+## Cache Strategy
 
 ## Deprecations/Removals
 
