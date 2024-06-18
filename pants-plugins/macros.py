@@ -1,6 +1,8 @@
 def default_ghcr_cache(target_name: str) -> tuple[str, Optional[str]]:  # noqa: F821
     """
-    From Github Actions default env vars, try to constitute
+    Using Github Actions default env vars - create a cache_from, and cache_to taking
+    into account branches and PRs for better cache locality.
+
     https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
     """
     # Need to specify this, because Pants doesn't reconcile `@ghcr` in the cache details
@@ -36,17 +38,23 @@ def default_ghcr_cache(target_name: str) -> tuple[str, Optional[str]]:  # noqa: 
 
 def docker_image_gha(name: str, **kwargs) -> None:
     """
-    A macro to create a Docker image that caches to Github Actions, by default.
+    A macro to create a Docker image that caches to Github Actions cache, by default.
     """
-    # cache_from = kwargs.pop("cache_from", {"type": "gha", "scope": name})
-    # cache_to = kwargs.pop("cache_to", {"type": "gha", "mode": "max", "scope": name})
+    cache_from = kwargs.pop("cache_from", {"type": "gha", "scope": name})
+    cache_to = kwargs.pop("cache_to", {"type": "gha", "mode": "max", "scope": name})
 
-    # docker_image(  # noqa: F821
-    #     name=name,
-    #     cache_from=cache_from,
-    #     cache_to=cache_to,
-    #     **kwargs,
-    # )
+    docker_image(  # noqa: F821
+        name=name,
+        cache_from=cache_from,
+        cache_to=cache_to,
+        **kwargs,
+    )
+
+
+def docker_image_ghcr(name: str, **kwargs) -> None:
+    """
+    A macro to create a Docker image that caches to Github Container Registry, by default.
+    """
 
     cache_from, cache_to = default_ghcr_cache(name)
     cache_from = kwargs.pop(

@@ -1,7 +1,5 @@
 # Dockerfiles
 
-## Cache Strategy
-
 ## Deprecations/Removals
 
 ### TI-specific toolchains
